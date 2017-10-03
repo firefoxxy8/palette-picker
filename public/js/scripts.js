@@ -14,5 +14,15 @@ const generateNewColourPalette = (e) => {
   e.keyCode === 32 ? generateColourPalette() : false
 }
 
+const displayLock = (e) => {
+  $(e.target).find('.fa').css('display', 'inline-block')
+}
+
+const hideLock = (e) => {
+  $(e.target).find('.fa').css('display', 'none')
+}
+
+$('.color').hover(displayLock, hideLock)
+
 $(window).on('keyup', generateNewColourPalette)
 $(window).on('load', generateColourPalette)
