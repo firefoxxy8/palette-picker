@@ -11,7 +11,7 @@ const generateColourPalette = () => {
 }
 
 const generateNewColourPalette = (e) => {
-  e.keyCode === 32 ? generateColourPalette() : false
+  e.keyCode === 32 && !$('input').is(':focus') ? generateColourPalette() : false
 }
 
 const displayLock = (e) => {
