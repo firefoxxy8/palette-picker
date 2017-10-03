@@ -1,0 +1,98 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  background: salmon;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 225px;
+  margin-bottom: 20px;
+  background-image: url('../assets/rainbow-bubbles.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.page-title {
+  font-size: 60px;
+  text-align: center;
+}
+
+.page-instruction {
+  font-size: 20px;
+  text-align: center;
+}
+
+.color-container {
+  display: flex;
+  justify-content: center;
+}
+
+.color {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 200px;
+  width: 200px;
+  margin: 5px;
+  padding: 10px;
+  border: 3px solid #000;
+  border-radius: 20px;
+}
+
+.fa {
+  display: none;
+}
+
+.fa-lock {
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.hex {
+  font-family: sans-serif;
+}
+
+.new-project-palette-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+select {
+  height: 40px;
+  width: 275px;
+  font-size: 20px;
+}
+
+.input {
+  height: 40px;
+  width: 275px;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.palette-name {
+  margin: 10px;
+}
+
+.recent-projects-container > h2 {
+  font-size: 40px;
+  text-align: center;
+}
