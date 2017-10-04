@@ -5,7 +5,6 @@ exports.up = (knex, Promise) => {
       table.string('project_name').unique()
       table.timestamps(true, true)
     }),
-
     knex.schema.createTable('palettes', (table) => {
       table.increments('id').primary()
       table.string('palette_name')
@@ -20,10 +19,9 @@ exports.up = (knex, Promise) => {
     })
   ])
 }
-
 exports.down = (knex, Promise) => {
   return Promise.all([
-    knex.schema.dropTable('projects'),
-    knex.schema.dropTable('palettes')
+    knex.schema.dropTable('palettes'),
+    knex.schema.dropTable('projects')
   ])
 }

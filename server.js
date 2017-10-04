@@ -51,12 +51,8 @@ app.post('api/v1/projects', (request, response) => {
   }
 
   database('projects').insert({ project_name }, '*')
-    .then( project => {
-      response.status(201).json(project)
-    })
-    .catch( error => {
-      response.status(500).json({ error });
-    });
+    .then( project => response.status(201).json(project))
+    .catch( error => response.status(500).json({ error }))
 });
 
 // save a palette to database
@@ -86,7 +82,7 @@ app.delete('api/v1/palettes/:id', (request, response) => {
 
 // delete a project (also deletes palettes)
 app.delete('api/v1/projects/:id', (request, response) => {
-  
+
 })
 
 
