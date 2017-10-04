@@ -5,8 +5,10 @@ const randomizeColour = () => {
 const generateColourPalette = () => {
   $('.color').each( (i, element) => {
     const randomColor = randomizeColour()
-    $(element).css('background-color', randomColor)
-    $(element).find('h3').text(randomColor.toUpperCase())
+    if ($(element).find('i').hasClass('fa-unlock-alt')) {
+      $(element).css('background-color', randomColor)
+      $(element).find('h3').text(randomColor.toUpperCase())
+    }
   })
 }
 
@@ -15,10 +17,12 @@ const generateNewColourPalette = (e) => {
 }
 
 const toggleLockedClass = (e) => {
-  console.log(e.target);
-  // this.classList.toggleClass('locked');
+  ($(e.target).hasClass('fa-unlock-alt')) ?
+    $(e.target).removeClass('fa-unlock-alt').addClass('fa-lock')
+    :
+    $(e.target).removeClass('fa-lock').addClass('fa-unlock-alt')
 }
 
-$('.fa').on('click', e => toggleLockedClass(e));
+$('.fa').on('click', toggleLockedClass);
 $(window).on('keyup', generateNewColourPalette);
 $(window).on('load', generateColourPalette);

@@ -70,10 +70,6 @@ header {
   cursor: pointer;
 }
 
-.fa-lock {
-  display: none;
-}
-
 .hex {
   font-family: sans-serif;
 }
