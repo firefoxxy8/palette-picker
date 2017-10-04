@@ -58,11 +58,19 @@ app.post('/api/v1/projects', (request, response) => {
 // save a palette to database
 app.post('/api/v1/palettes', (request, response) => {
   const paletteObject = request.body;
-  for (let requiredParameter of Object.Keys(paletteObject)) {
+  for (let requiredParameter of [
+    'palette_name',
+    'hex_one',
+    'hex_two',
+    'hex_three',
+    'hex-four',
+    'hex-five',
+    'project_id'
+  ]) {
       if (!paletteObject[requiredParameter]) {
         return response
           .status(422)
-          .send({ error: 'Missing required information to complete request' });
+          .send({ error: `Expected format: { palette_name: <String>, hex_one: <String>, hex_two: <String>, hex_three: <String>, hex_four: <String>, hex_five: <String>, project_id: <Integer> }. You're missing a ${requiredParameter} property.` });
       }
     }
 
