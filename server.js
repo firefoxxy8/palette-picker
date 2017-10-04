@@ -44,7 +44,7 @@ app.get('/api/v1/palettes', (request, response) => {
 })
 
 // create and save a new project folder
-app.post('api/v1/projects', (request, response) => {
+app.post('/api/v1/projects', (request, response) => {
   const { project_name } = request.body;
   if (!project_name) {
     return response.status(422).json({ error: 'Missing required information to complete request' })
@@ -56,7 +56,7 @@ app.post('api/v1/projects', (request, response) => {
 });
 
 // save a palette to database
-app.post('api/v1/palettes', (request, response) => {
+app.post('/api/v1/palettes', (request, response) => {
   const paletteObject = request.body;
   for (let requiredParameter of Object.Keys(paletteObject)) {
       if (!paletteObject[requiredParameter]) {
@@ -76,13 +76,19 @@ app.post('api/v1/palettes', (request, response) => {
 });
 
 // delete a palette
-app.delete('api/v1/palettes/:id', (request, response) => {
+app.delete('/api/v1/palettes/:id', (request, response) => {
+  const { id } = request.params.id;
 
+  database('palettes').where({ id }).del()
+    .then( response => response.sendStatus(200) )
 })
 
 // delete a project (also deletes palettes)
-app.delete('api/v1/projects/:id', (request, response) => {
+app.delete('/api/v1/projects/:id', (request, response) => {
+  const { id } = request.params.id;
 
+  database('projects').where({ id }).del()
+    .then( response => response.sendStatus(200) )
 })
 
 
