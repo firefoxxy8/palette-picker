@@ -84,6 +84,7 @@ header {
 select {
   height: 40px;
   width: 275px;
+  margin: 5px;
   font-size: 20px;
 }
 
@@ -96,8 +97,16 @@ select {
   font-size: 20px;
 }
 
-.palette-name {
-  margin: 10px;
+button {
+  height: 40px;
+  width: 60px;
+  padding: 5px;
+  font-size: 16px;
+  background: #f8f8f8;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px #d8d8d8;
+  cursor: pointer;
 }
 
 .recent-projects-container > h2 {
