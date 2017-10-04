@@ -47,7 +47,7 @@ app.get('/api/v1/palettes', (request, response) => {
 app.post('/api/v1/projects', (request, response) => {
   const { project_name } = request.body;
   if (!project_name) {
-    return response.status(422).json({ error: 'Missing required information to complete request' })
+    return response.status(422).json({ error: 'Missing required information of property: project_name to complete request' })
   }
 
   database('projects').insert({ project_name }, '*')
@@ -85,20 +85,15 @@ app.post('/api/v1/palettes', (request, response) => {
 
 // delete a palette
 app.delete('/api/v1/palettes/:id', (request, response) => {
-  const { id } = request.params.id;
+  const id = request.params.id;
 
   database('palettes').where({ id }).del()
-    .then( response => response.sendStatus(200) )
-})
-
-// delete a project (also deletes palettes)
-app.delete('/api/v1/projects/:id', (request, response) => {
-  const { id } = request.params.id;
-
-  database('projects').where({ id }).del()
-    .then( response => response.sendStatus(200) )
-})
-
+    .then( deleted => !deleted ?
+      response.status(422).json({ error: 'A palette matching the id submitted could not be found' })
+      :
+      response.sendStatus(204) )
+    .catch( error => response.status(500).json({ error }) );
+});
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
