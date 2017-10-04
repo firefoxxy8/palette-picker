@@ -23,6 +23,7 @@ const toggleLockedClass = (e) => {
     $(e.target).removeClass('fa-lock').addClass('fa-unlock-alt')
 }
 
+
 $('.fa').on('click', toggleLockedClass);
 $(window).on('keyup', generateNewColourPalette);
 $(window).on('load', generateColourPalette);
