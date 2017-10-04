@@ -15,9 +15,8 @@ app.set('port', process.env.PORT || 3000);
 app.locals.title = 'Palette Picker';
 
 // ENDPOINTS
-
 // retrieve all projects
-app.get('/api/projects', (request, response) => {
+app.get('/api/v1/projects', (request, response) => {
   database('projects').select()
     .then( projects => {
       if (!projects.length) {
@@ -31,7 +30,7 @@ app.get('/api/projects', (request, response) => {
 })
 
 // retrieve all palettes
-app.get('/api/palettes', (request, response) => {
+app.get('/api/v1/palettes', (request, response) => {
   database('palettes').select()
     .then( palettes => {
       if (!palettes.length) {
@@ -44,16 +43,53 @@ app.get('/api/palettes', (request, response) => {
     })
 })
 
-
 // create and save a new project folder
+app.post('/api/v1/projects', (request, response) => {
+  const { project_name } = request.body;
+  if (!project_name) {
+    return response.status(422).json({ error: 'Missing required information to complete request' })
+  }
+
+  database('projects').insert({ project_name }, '*')
+    .then( project => response.status(201).json(project))
+    .catch( error => response.status(500).json({ error }))
+});
 
 // save a palette to database
+app.post('/api/v1/palettes', (request, response) => {
+  const paletteObject = request.body;
+  for (let requiredParameter of Object.Keys(paletteObject)) {
+      if (!paletteObject[requiredParameter]) {
+        return response
+          .status(422)
+          .send({ error: 'Missing required information to complete request' });
+      }
+    }
+
+  database('palettes').insert(paletteObject, '*')
+    .then( palette => {
+      response.status(201).json(palette)
+    })
+    .catch( error => {
+      response.status(500).json({ error });
+    });
+});
 
 // delete a palette
+app.delete('/api/v1/palettes/:id', (request, response) => {
+  const { id } = request.params.id;
+
+  database('palettes').where({ id }).del()
+    .then( response => response.sendStatus(200) )
+})
 
 // delete a project (also deletes palettes)
+app.delete('/api/v1/projects/:id', (request, response) => {
+  const { id } = request.params.id;
 
-
+  database('projects').where({ id }).del()
+    .then( response => response.sendStatus(200) )
+})
 
 
 app.listen(app.get('port'), () => {
