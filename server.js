@@ -15,9 +15,8 @@ app.set('port', process.env.PORT || 3000);
 app.locals.title = 'Palette Picker';
 
 // ENDPOINTS
-
 // retrieve all projects
-app.get('/api/projects', (request, response) => {
+app.get('/api/v1/projects', (request, response) => {
   database('projects').select()
     .then( projects => {
       if (!projects.length) {
@@ -31,7 +30,7 @@ app.get('/api/projects', (request, response) => {
 })
 
 // retrieve all palettes
-app.get('/api/palettes', (request, response) => {
+app.get('/api/v1/palettes', (request, response) => {
   database('palettes').select()
     .then( palettes => {
       if (!palettes.length) {
@@ -44,8 +43,22 @@ app.get('/api/palettes', (request, response) => {
     })
 })
 
-
 // create and save a new project folder
+app.post('api/v1/projects', (request, response) => {
+  console.log(request.body);
+  const { project_name } = request.body;
+  if (!project_name) {
+    return response.status(422).json({ error: 'Missing required information to complete request' })
+  }
+
+  database('projects').insert({ project_name }, '*')
+    .then( project => {
+      response.status(201).json(project)
+    })
+    .catch( error => {
+      response.status(500).json({ error });
+    });
+});
 
 // save a palette to database
 
