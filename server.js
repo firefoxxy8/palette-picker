@@ -45,7 +45,6 @@ app.get('/api/v1/palettes', (request, response) => {
 
 // create and save a new project folder
 app.post('api/v1/projects', (request, response) => {
-  console.log(request.body);
   const { project_name } = request.body;
   if (!project_name) {
     return response.status(422).json({ error: 'Missing required information to complete request' })
@@ -61,12 +60,34 @@ app.post('api/v1/projects', (request, response) => {
 });
 
 // save a palette to database
+app.post('api/v1/palettes', (request, response) => {
+  const paletteObject = request.body;
+  for (let requiredParameter of Object.Keys(paletteObject)) {
+      if (!paletteObject[requiredParameter]) {
+        return response
+          .status(422)
+          .send({ error: 'Missing required information to complete request' });
+      }
+    }
+
+  database('palettes').insert(paletteObject, '*')
+    .then( palette => {
+      response.status(201).json(palette)
+    })
+    .catch( error => {
+      response.status(500).json({ error });
+    });
+});
 
 // delete a palette
+app.delete('api/v1/palettes/:id', (request, response) => {
+
+})
 
 // delete a project (also deletes palettes)
-
-
+app.delete('api/v1/projects/:id', (request, response) => {
+  
+})
 
 
 app.listen(app.get('port'), () => {
