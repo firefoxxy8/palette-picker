@@ -14,5 +14,11 @@ const generateNewColourPalette = (e) => {
   e.keyCode === 32 && !$('input').is(':focus') ? generateColourPalette() : false
 }
 
-$(window).on('keyup', generateNewColourPalette)
-$(window).on('load', generateColourPalette)
+const toggleLockedClass = (e) => {
+  console.log(e.target);
+  // this.classList.toggleClass('locked');
+}
+
+$('.fa').on('click', e => toggleLockedClass(e));
+$(window).on('keyup', generateNewColourPalette);
+$(window).on('load', generateColourPalette);
