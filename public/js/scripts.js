@@ -65,10 +65,11 @@ const appendSwatches = (colourSwatches, id) => {
 
   hexArray.forEach( (hexValue, i) => {
     $(`#palette-${id}`).find('.swatch').append(
-      `<div class='small-hex small-hex${i + 1}'></div>`)
-
-    $(`#palette-${id} .swatch .small-hex${i + 1}`).css('background-color', colourSwatches[hexValue])
-  })
+      `<div
+          style='background:${colourSwatches[hexValue]}' class='small-hex small-hex${i + 1}'
+          date-hex='${colourSwatches[hexValue]}'>
+        </div>`)
+  });
 }
 
 const appendPalette = (paletteObject) => {
@@ -167,6 +168,14 @@ const deletePalette = (e) => {
   removePaletteFromDB(paletteId);
   paletteToDelete.remove();
 }
+
+const displayLargePalette = (e) => {
+
+  const paletteClicked = $(e.target).closest('.palette-card');
+  const paletteId = paletteClicked.attr('id').split('-')[1];
+}
+
+$('.recent-projects').on('click', '.palette-card', displayLargePalette);
 
 $('.recent-projects').on('click', '.delete-btn', deletePalette);
 
