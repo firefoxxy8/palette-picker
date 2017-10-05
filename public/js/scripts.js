@@ -23,13 +23,13 @@ const toggleLockedClass = (e) => {
     $(e.target).removeClass('fa-lock').addClass('fa-unlock-alt')
 }
 
-const appendProject = (projectObject) => {
+const prependProject = (projectObject) => {
   const { project_name, id } = projectObject;
 
   $('#project-dropdown')
-    .append(`<option value='${id}'>${project_name}</option>`);
+    .prepend(`<option value='${id}'>${project_name}</option>`);
 
-  $('.recent-projects').append(`
+  $('.recent-projects').prepend(`
     <article class='project-card' id='project-${id}'>
       <h3>${project_name}</h3>
     </article>`)
@@ -50,7 +50,7 @@ const storeProject = (project_name) => {
     return response
   })
   .then( response => response.json() )
-  .then( parsedResponse => appendProject(parsedResponse[0]) )
+  .then( parsedResponse => prependProject(parsedResponse[0]) )
   .catch( error => console.log(error) )
 }
 
@@ -61,13 +61,15 @@ const createNewProject = () => {
 }
 
 const appendSwatches = (colourSwatches, id) => {
-  const hexArray = Object.keys(colourSwatches)
+  const hexArray = Object.keys(colourSwatches);
 
-  for (i = 0; i < 5; i++) {
+  hexArray.forEach( (hexValue, i) => {
     $(`#palette-${id}`).find('.swatch').append(
-      `<div class='small-hex small-hex${i + 1}'></div>`)
-    $(`.small-hex${i + 1}`).css('background-color', colourSwatches[hexArray[i]])
-  }
+      `<div
+          style='background:${colourSwatches[hexValue]}' class='small-hex small-hex${i + 1}'
+          data-hex='${colourSwatches[hexValue]}'>
+        </div>`)
+  });
 }
 
 const appendPalette = (paletteObject) => {
@@ -143,11 +145,11 @@ const fetchAll = (path, appendMethod) => {
 
 const loadPageInfo = () => {
   generateColourPalette();
-  fetchAll('projects', appendProject);
+  fetchAll('projects', prependProject);
   fetchAll('palettes', appendPalette);
 }
 
-const removePalette = (id) => {
+const removePaletteFromDB = (id) => {
   fetch(`/api/v1/palettes/${id}`, {
     method: 'DELETE',
   })
@@ -163,9 +165,25 @@ const removePalette = (id) => {
 const deletePalette = (e) => {
   const paletteToDelete = $(e.target).closest('.palette-card')
   const paletteId = paletteToDelete.attr('id').split('-')[1];
-  removePalette(paletteId);
+  removePaletteFromDB(paletteId);
   paletteToDelete.remove();
 }
+
+const displayLargePalette = (e) => {
+  if (!($(e.target).attr('.delete-btn'))) {
+    const swatchArray = $(e.target).closest('.palette-card').find('.small-hex');
+
+    swatchArray.each( (i, element) => {
+      const hexValue = $(element).attr('data-hex');
+      const mainDisplay = $('.color')[i];
+
+      $(mainDisplay).css('background-color', hexValue);
+      $(mainDisplay).find('h3').text(hexValue.toUpperCase());
+    });
+  }
+}
+
+$('.recent-projects').on('click', '.palette-card', displayLargePalette);
 
 $('.recent-projects').on('click', '.delete-btn', deletePalette);
 
