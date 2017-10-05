@@ -77,6 +77,7 @@ const appendPalette = (paletteObject) => {
   $(`#project-${project_id}`).append(`
     <div class='palette-card' id='palette-${id}'>
       <h2>${palette_name}</h2>
+      <button class='delete-btn'>Delete</button>
       <div class='swatch'></div>
     </div>`)
 
@@ -122,6 +123,12 @@ const loadPageInfo = () => {
   fetchAll('projects', appendProject);
   fetchAll('palettes', appendPalette);
 }
+
+const deletePalette = (e) => {
+  console.log(e.target);
+}
+
+$('.recent-projects').on('click', '.delete-btn', deletePalette);
 
 $('.save-palette-btn').on('click', createNewPalette);
 
