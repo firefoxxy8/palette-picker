@@ -116,12 +116,14 @@ button {
 
 .recent-projects {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 .project-card {
   height: 300px;
   width: 300px;
+  margin: 10px;
   padding: 10px;
   background: #fff;
   border-radius: 12px;

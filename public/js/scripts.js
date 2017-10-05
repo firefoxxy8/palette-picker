@@ -109,10 +109,24 @@ const createNewPalette = () => {
   $('.palette-name').val('');
 }
 
+const fetchAll = (path, appendMethod) => {
+  fetch(`/api/v1/${path}`)
+    .then( response => response.json() )
+    .then( parsedResponse => {
+      return parsedResponse.map( object => appendMethod(object) )
+    })
+}
+
+const loadPageInfo = () => {
+  generateColourPalette();
+  fetchAll('projects', appendProject);
+  fetchAll('palettes', appendPalette);
+}
+
 $('.save-palette-btn').on('click', createNewPalette);
 
 $('.save-project-btn').on('click', createNewProject);
 
 $('.fa').on('click', toggleLockedClass);
 $(window).on('keyup', generateNewColourPalette);
-$(window).on('load', generateColourPalette);
+$(window).on('load', loadPageInfo);
