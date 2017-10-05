@@ -55,11 +55,8 @@ const createNewProject = () => {
 
 const appendSwatches = (colourSwatches, id) => {
   const hexArray = Object.keys(colourSwatches)
-  console.log(hexArray);
 
   for (i = 0; i < 5; i++) {
-    console.log('hex value', colourSwatches[hexArray[i]])
-
     $(`#palette-${id}`).find('.swatch').append(
       `<div class='small-hex small-hex${i + 1}'></div>`)
     $(`.small-hex${i + 1}`).css('background-color', colourSwatches[hexArray[i]])
