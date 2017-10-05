@@ -61,13 +61,14 @@ const createNewProject = () => {
 }
 
 const appendSwatches = (colourSwatches, id) => {
-  const hexArray = Object.keys(colourSwatches)
+  const hexArray = Object.keys(colourSwatches);
 
-  for (i = 0; i < 5; i++) {
+  hexArray.forEach( (hexValue, i) => {
     $(`#palette-${id}`).find('.swatch').append(
       `<div class='small-hex small-hex${i + 1}'></div>`)
-    $(`.small-hex${i + 1}`).css('background-color', colourSwatches[hexArray[i]])
-  }
+
+    $(`#palette-${id} .swatch .small-hex${i + 1}`).css('background-color', colourSwatches[hexValue])
+  })
 }
 
 const appendPalette = (paletteObject) => {
@@ -147,7 +148,7 @@ const loadPageInfo = () => {
   fetchAll('palettes', appendPalette);
 }
 
-const removePalette = (id) => {
+const removePaletteFromDB = (id) => {
   fetch(`/api/v1/palettes/${id}`, {
     method: 'DELETE',
   })
@@ -163,7 +164,7 @@ const removePalette = (id) => {
 const deletePalette = (e) => {
   const paletteToDelete = $(e.target).closest('.palette-card')
   const paletteId = paletteToDelete.attr('id').split('-')[1];
-  removePalette(paletteId);
+  removePaletteFromDB(paletteId);
   paletteToDelete.remove();
 }
 
