@@ -43,8 +43,15 @@ const storeProject = (project_name) => {
       'Content-Type': 'application/json'
     }
   })
+  .then( response => {
+    if (response.status !== 201) {
+      console.log(response)
+    }
+    return response
+  })
   .then( response => response.json() )
   .then( parsedResponse => appendProject(parsedResponse[0]) )
+  .catch( error => console.log(error) )
 }
 
 const createNewProject = () => {
@@ -92,8 +99,15 @@ const storePalette = (paletteObject) => {
       'Content-Type': 'application/json'
     }
   })
+  .then( response => {
+    if (response.status !== 201) {
+      console.log(response)
+    }
+    return response
+  })
   .then( response => response.json() )
   .then( parsedResponse => appendPalette(parsedResponse[0]) )
+  .catch( error => console.log(error) )
 }
 
 const createNewPalette = () => {
@@ -112,10 +126,17 @@ const createNewPalette = () => {
 
 const fetchAll = (path, appendMethod) => {
   fetch(`/api/v1/${path}`)
+    .then( response => {
+      if (response.status !== 200) {
+        console.log(response)
+      }
+      return response
+    })
     .then( response => response.json() )
     .then( parsedResponse => {
       return parsedResponse.map( object => appendMethod(object) )
     })
+    .catch( error => console.log(error) )
 }
 
 const loadPageInfo = () => {
@@ -128,7 +149,13 @@ const removePalette = (id) => {
   fetch(`/api/v1/palettes/${id}`, {
     method: 'DELETE',
   })
-  .then( response => console.log(response))
+  .then( response => {
+    if (response.status !== 204) {
+      console.log(response)
+    }
+    console.log(response)
+  })
+  .catch( error => console.log(error) )
 }
 
 const deletePalette = (e) => {
