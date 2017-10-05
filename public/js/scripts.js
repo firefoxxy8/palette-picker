@@ -83,8 +83,10 @@ const appendPalette = (paletteObject) => {
 
   $(`#project-${project_id}`).append(`
     <div class='palette-card' id='palette-${id}'>
-      <h2>${palette_name}</h2>
-      <button class='delete-btn'><i class="fa fa-trash" aria-hidden="true"></i></button>
+      <div class='palette-title-container'>
+        <h4>${palette_name}</h4>
+        <button class='delete-btn'><i class="fa fa-trash" aria-hidden="true"></i></button>
+      </div>
       <div class='swatch'></div>
     </div>`)
 

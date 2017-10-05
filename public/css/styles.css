@@ -152,17 +152,35 @@ button {
 }
 
 .project-card > h3 {
+  font-size: 26px;
   text-align: center;
 }
 
 .palette-card {
   width: 100%;
-  padding: 5px;
+  margin: 8px 0;
+  padding: 10px;
   background: #d8d8d8;
+  border-radius: 5px;
+}
+
+.palette-title-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.palette-title-container > h4 {
+  color: #666;
+  font-size: 24px;
+}
+
+.delete-btn {
+  width: 50px;
 }
 
 .fa-trash {
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .swatch {
