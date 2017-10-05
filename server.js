@@ -63,8 +63,8 @@ app.post('/api/v1/palettes', (request, response) => {
     'hex_one',
     'hex_two',
     'hex_three',
-    'hex-four',
-    'hex-five',
+    'hex_four',
+    'hex_five',
     'project_id'
   ]) {
       if (!paletteObject[requiredParameter]) {
