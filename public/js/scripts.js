@@ -124,8 +124,18 @@ const loadPageInfo = () => {
   fetchAll('palettes', appendPalette);
 }
 
+const removePalette = (id) => {
+  fetch(`/api/v1/palettes/${id}`, {
+    method: 'DELETE',
+  })
+  .then( response => console.log(response))
+}
+
 const deletePalette = (e) => {
-  console.log(e.target);
+  const paletteToDelete = $(e.target).closest('.palette-card')
+  const paletteId = paletteToDelete.attr('id').split('-')[1];
+  removePalette(paletteId);
+  paletteToDelete.remove();
 }
 
 $('.recent-projects').on('click', '.delete-btn', deletePalette);
