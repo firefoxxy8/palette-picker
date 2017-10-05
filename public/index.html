@@ -8,11 +8,35 @@
     <title>Palette Picker</title>
   </head>
   <body>
-    <header>
-      <h1 class="page-title">Palette Picker</h1>
-      <p class="page-instruction">Press the spacebar to generate a colour scheme!</p>
-    </header>
+
+    <aside class="leftside-container">
+      <section class="new-project-palette-container">
+        <div class="input-btn-container">
+          <input class="input project-name" type="text" placeholder="Create a new project">
+          <button class="save-project-btn">Save</button>
+        </div>
+        <select id="project-dropdown">
+          <!-- Append new projects here -->
+        </select>
+        <div class="input-btn-container">
+          <input class="input palette-name" type="text" placeholder="Name your palette">
+          <button class="save-palette-btn">Save</button>
+        </div>
+      </section>
+      <section class="recent-projects-container">
+        <h2>Recent Projects</h2>
+        <div class="recent-projects">
+          <!-- Recent projects listed here with palettes -->
+        </div>
+      </section>
+    </aside>
     <main>
+      <header>
+        <div class="title-overlay">
+          <h1 class="page-title">Palette Picker</h1>
+          <p class="page-instruction">Press the spacebar to generate a colour scheme!</p>
+        </div>
+      </header>
       <section class="color-container">
         <div class="color colorOne">
           <div class="lock-box">
@@ -43,25 +67,6 @@
             <i class="fa fa-unlock-alt" aria-hidden="true"></i>
             <h3 class="hex hex-five">#000000</h3>
           </div>
-        </div>
-      </section>
-      <section class="new-project-palette-container">
-        <div class="input-btn-container">
-          <input class="input project-name" type="text" placeholder="Create a new project">
-          <button class="save-project-btn">Save</button>
-        </div>
-        <select id="project-dropdown">
-          <!-- Append new projects here -->
-        </select>
-        <div class="input-btn-container">
-          <input class="input palette-name" type="text" placeholder="Name your palette">
-          <button class="save-palette-btn">Save</button>
-        </div>
-      </section>
-      <section class="recent-projects-container">
-        <h2>My Recent Projects</h2>
-        <div class="recent-projects">
-          <!-- Recent projects listed here with palettes -->
         </div>
       </section>
     </main>
