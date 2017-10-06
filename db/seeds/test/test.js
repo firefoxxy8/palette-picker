@@ -5,11 +5,13 @@ exports.seed = function(knex, Promise) {
     .then( () => {
       return Promise.all([
         knex('projects').insert({
+          id: 1,
           project_name: 'Unicorns and Rainbows'
         }, 'id')
         .then( project => {
           return knex('palettes').insert([
             {
+              id: 1,
               palette_name: 'pastels',
               hex_one: '#5910FF',
               hex_two: '#1B77A9',
@@ -19,6 +21,7 @@ exports.seed = function(knex, Promise) {
               project_id: project[0]
             },
             {
+              id: 2,
               palette_name: 'sunrise',
               hex_one: '#E84514',
               hex_two: '#95239A',

@@ -16,32 +16,21 @@ app.locals.title = 'Palette Picker';
 
 // ENDPOINTS
 // retrieve all projects
+
+// do i need to add 404 status logic here?
 app.get('/api/v1/projects', (request, response) => {
   database('projects').select()
-    .then( projects => {
-      if (!projects.length) {
-        return response.status(404).json({ error: 'No projects were found' })
-      }
-      response.status(200).json(projects);
-    })
-    .catch( error => {
-      response.status(500).json({ error });
-    })
-})
+    .then( projects => response.status(200).json(projects) )
+    .catch( error => response.status(500).json({ error }))
+});
 
 // retrieve all palettes
+// do i need to add 404 status logic here?
 app.get('/api/v1/palettes', (request, response) => {
   database('palettes').select()
-    .then( palettes => {
-      if (!palettes.length) {
-        return response.status(404).json({ error: 'No palettes were found' })
-      }
-      response.status(200).json(palettes);
-    })
-    .catch( error => {
-      response.status(500).json({ error });
-    })
-})
+    .then( palettes => response.status(200).json(palettes))
+    .catch( error => response.status(500).json({ error }))
+});
 
 // create and save a new project folder
 app.post('/api/v1/projects', (request, response) => {
