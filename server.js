@@ -74,7 +74,7 @@ app.post('/api/v1/palettes', (request, response) => {
 
 // delete a palette
 app.delete('/api/v1/palettes/:id', (request, response) => {
-  const id = request.params.id;
+  const { id } = request.params;
 
   database('palettes').where({ id }).del()
     .then( deleted => !deleted ?
