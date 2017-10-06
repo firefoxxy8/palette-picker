@@ -1,19 +1,19 @@
-const randomizeColour = () => {
-  return "#000000".replace(/0/g, () => (~~(Math.random()*16)).toString(16))
+const randomizeColor = () => {
+  return "#000000".replace(/0/g, () => (~~(Math.random()*16)).toString(16));
 }
 
-const generateColourPalette = () => {
+const generateColorPalette = () => {
   $('.color').each( (i, element) => {
-    const randomColor = randomizeColour()
+    const randomColor = randomizeColor();
     if ($(element).find('i').hasClass('fa-unlock-alt')) {
-      $(element).css('background-color', randomColor)
-      $(element).find('h3').text(randomColor.toUpperCase())
+      $(element).css('background-color', randomColor);
+      $(element).find('h3').text(randomColor.toUpperCase());
     }
-  })
+  });
 }
 
-const generateNewColourPalette = (e) => {
-  e.keyCode === 32 && !$('input').is(':focus') ? generateColourPalette() : false
+const generateNewColorPalette = (e) => {
+  e.keyCode === 32 && !$('input').is(':focus') ? generateColorPalette() : false
 }
 
 const toggleLockedClass = (e) => {
@@ -25,14 +25,12 @@ const toggleLockedClass = (e) => {
 
 const prependProject = (projectObject) => {
   const { project_name, id } = projectObject;
-
   $('#project-dropdown')
     .prepend(`<option value='${id}'>${project_name}</option>`);
-
   $('.recent-projects').prepend(`
     <article class='project-card' id='project-${id}'>
       <h3>${project_name}</h3>
-    </article>`)
+    </article>`);
 }
 
 const storeProject = (project_name) => {
@@ -45,13 +43,13 @@ const storeProject = (project_name) => {
   })
   .then( response => {
     if (response.status !== 201) {
-      console.log(response)
+      console.log(response);
     }
-    return response
+    return response;
   })
   .then( response => response.json() )
   .then( parsedResponse => prependProject(parsedResponse[0]) )
-  .catch( error => console.log(error) )
+  .catch( error => console.log(error) );
 }
 
 const createNewProject = () => {
@@ -62,26 +60,24 @@ const createNewProject = () => {
 
 const appendSwatches = (colourSwatches, id) => {
   const hexArray = Object.keys(colourSwatches);
-
   hexArray.forEach( (hexValue, i) => {
     $(`#palette-${id}`).find('.swatch').append(
       `<div
           style='background:${colourSwatches[hexValue]}' class='small-hex small-hex${i + 1}'
           data-hex='${colourSwatches[hexValue]}'>
-        </div>`)
+       </div>`);
   });
 }
 
 const appendPalette = (paletteObject) => {
   const { palette_name, project_id, id } = paletteObject;
-
-  const colourSwatches = Object.assign({}, {
+  const colorSwatches = Object.assign({}, {
     hex_one: paletteObject.hex_one,
     hex_two: paletteObject.hex_two,
     hex_three: paletteObject.hex_three,
     hex_four: paletteObject.hex_four,
     hex_five: paletteObject.hex_five
-  })
+  });
 
   $(`#project-${project_id}`).append(`
     <div class='palette-card' id='palette-${id}'>
@@ -90,9 +86,9 @@ const appendPalette = (paletteObject) => {
         <button class='delete-btn'><i class="fa fa-trash" aria-hidden="true"></i></button>
       </div>
       <div class='swatch'></div>
-    </div>`)
+    </div>`);
 
-  appendSwatches(colourSwatches, id);
+  appendSwatches(colorSwatches, id);
 }
 
 const storePalette = (paletteObject) => {
@@ -105,13 +101,13 @@ const storePalette = (paletteObject) => {
   })
   .then( response => {
     if (response.status !== 201) {
-      console.log(response)
+      console.log(response);
     }
-    return response
+    return response;
   })
   .then( response => response.json() )
   .then( parsedResponse => appendPalette(parsedResponse[0]) )
-  .catch( error => console.log(error) )
+  .catch( error => console.log(error) );
 }
 
 const createNewPalette = () => {
@@ -132,19 +128,19 @@ const fetchAll = (path, appendMethod) => {
   fetch(`/api/v1/${path}`)
     .then( response => {
       if (response.status !== 200) {
-        console.log(response)
+        console.log(response);
       }
-      return response
+      return response;
     })
     .then( response => response.json() )
     .then( parsedResponse => {
       return parsedResponse.map( object => appendMethod(object) )
     })
-    .catch( error => console.log(error) )
+    .catch( error => console.log(error) );
 }
 
 const loadPageInfo = () => {
-  generateColourPalette();
+  generateColorPalette();
   fetchAll('projects', prependProject);
   fetchAll('palettes', appendPalette);
 }
@@ -155,28 +151,26 @@ const removePaletteFromDB = (id) => {
   })
   .then( response => {
     if (response.status !== 204) {
-      console.log(response)
+      console.log(response);
     }
-    console.log(response)
+    console.log(response);
   })
-  .catch( error => console.log(error) )
+  .catch( error => console.log(error) );
 }
 
 const deletePalette = (e) => {
-  const paletteToDelete = $(e.target).closest('.palette-card')
+  const paletteToDelete = $(e.target).closest('.palette-card');
   const paletteId = paletteToDelete.attr('id').split('-')[1];
   removePaletteFromDB(paletteId);
   paletteToDelete.remove();
 }
 
 const displayLargePalette = (e) => {
-  if (!($(e.target).attr('.delete-btn'))) {
+  if (!($(e.target).closest('.delete-btn'))) {
     const swatchArray = $(e.target).closest('.palette-card').find('.small-hex');
-
     swatchArray.each( (i, element) => {
       const hexValue = $(element).attr('data-hex');
       const mainDisplay = $('.color')[i];
-
       $(mainDisplay).css('background-color', hexValue);
       $(mainDisplay).find('h3').text(hexValue.toUpperCase());
     });
@@ -184,13 +178,9 @@ const displayLargePalette = (e) => {
 }
 
 $('.recent-projects').on('click', '.palette-card', displayLargePalette);
-
 $('.recent-projects').on('click', '.delete-btn', deletePalette);
-
 $('.save-palette-btn').on('click', createNewPalette);
-
 $('.save-project-btn').on('click', createNewProject);
-
 $('.fa').on('click', toggleLockedClass);
-$(window).on('keyup', generateNewColourPalette);
+$(window).on('keyup', generateNewColorPalette);
 $(window).on('load', loadPageInfo);
