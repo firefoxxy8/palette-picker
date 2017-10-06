@@ -20,21 +20,18 @@ app.listen(app.get('port'), () => {
 
 // ENDPOINTS
 
-// retrieve all projects
 app.get('/api/v1/projects', (request, response) => {
   database('projects').select()
     .then( projects => response.status(200).json(projects) )
     .catch( error => response.status(500).json({ error }))
 });
 
-// retrieve all palettes
 app.get('/api/v1/palettes', (request, response) => {
   database('palettes').select()
     .then( palettes => response.status(200).json(palettes))
     .catch( error => response.status(500).json({ error }))
 });
 
-// create and save a new project folder
 app.post('/api/v1/projects', (request, response) => {
   const { project_name } = request.body;
   if (!project_name) {
@@ -46,7 +43,6 @@ app.post('/api/v1/projects', (request, response) => {
     .catch( error => response.status(500).json({ error }))
 });
 
-// save a palette to database
 app.post('/api/v1/palettes', (request, response) => {
   const paletteObject = request.body;
   for (let requiredParameter of [
@@ -74,7 +70,6 @@ app.post('/api/v1/palettes', (request, response) => {
     });
 });
 
-// delete a palette
 app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
 
