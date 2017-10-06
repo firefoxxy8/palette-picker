@@ -198,7 +198,26 @@ describe('API Routes', () => {
     });
   });
 
-  describe('DELETE /api/v1/palettes/:id')
+  describe('DELETE /api/v1/palettes/:id', () => {
+    it('should successfully delete a palette from the palettes table', (done) => {
+      chai.request(server)
+      .delete('/api/v1/palettes/1')
+      .end( (error, response) => {
+        response.should.have.status(204);
+        done();
+      });
+    });
+
+    it('should return return a status 422 if palette cannot be found', (done) => {
+      chai.request(server)
+      .delete('/api/v1/palettes/100')
+      .end( (error, response) => {
+        response.should.have.status(422);
+        response.body.error.should.equal('A palette matching the id submitted could not be found');
+        done();
+      });
+    });
+  });
 
 
 
