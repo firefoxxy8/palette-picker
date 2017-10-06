@@ -78,7 +78,7 @@ app.delete('/api/v1/palettes/:id', (request, response) => {
 
   database('palettes').where({ id }).del()
     .then( deleted => !deleted ?
-      response.status(422).json({ error: 'A palette matching the id submitted could not be found' })
+      response.status(404).json({ error: 'A palette matching the id submitted could not be found' })
       :
       response.sendStatus(204) )
     .catch( error => response.status(500).json({ error }) );

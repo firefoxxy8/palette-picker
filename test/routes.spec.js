@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 
 describe('Client Routes', () => {
 
-  it('should return the homepage with text', (done) => {
+  it('should return the homepage', (done) => {
     chai.request(server)
     .get('/')
     .end( (error, response) => {
@@ -22,7 +22,7 @@ describe('Client Routes', () => {
     });
   });
 
-  it('should return a 404 route that does not exist', (done) => {
+  it('should return a 404 for route that does not exist', (done) => {
     chai.request(server)
     .get('/eureka')
     .end( (error, response) => {
@@ -34,16 +34,16 @@ describe('Client Routes', () => {
 
 describe('API Routes', () => {
 
-  before((done) => {
+  before( (done) => {
     database.migrate.latest()
-      .then(() => done())
-      .catch(error => console.log(error));
+      .then( () => done() )
+      .catch( (error) => console.log(error) );
   });
 
-  beforeEach((done) => {
+  beforeEach( (done) => {
     database.seed.run()
-      .then(() => done())
-      .catch(error => console.log(error));
+      .then( () => done() )
+      .catch( (error) => console.log(error) );
   });
 
   describe('GET /api/v1/projects', () => {
@@ -63,7 +63,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should return a 404 status if the url is incorrect', (done) => {
+    it('should return a 404 if the url is incorrect', (done) => {
       chai.request(server)
       .get('/api/v1/projectsss')
       .end( (error, response) => {
@@ -116,7 +116,7 @@ describe('API Routes', () => {
   });
 
   describe('POST /api/v1/projects', () => {
-    it('should add a new project to the projects table in db', (done) => {
+    it('should add a new project to the projects table in database', (done) => {
       chai.request(server)
       .post('/api/v1/projects')
       .send({
@@ -128,7 +128,16 @@ describe('API Routes', () => {
         response.body[0].should.have.property('project_name');
         response.body[0].project_name.should.equal('New Sample Project');
         response.body[0].should.have.property('id');
-        done();
+
+        chai.request(server)
+        .get('/api/v1/projects')
+        .end( (error, response) => {
+          response.should.have.status(200);
+          response.body.should.be.a('array');
+          response.body.length.should.equal(2);
+          response.res.text.should.include('New Sample Project');
+          done();
+        });
       });
     });
 
@@ -179,7 +188,16 @@ describe('API Routes', () => {
         response.body[0].hex_five.should.equal('#1CE6C7');
         response.body[0].should.have.property('project_id');
         response.body[0].project_id.should.equal(1);
-        done();
+
+        chai.request(server)
+        .get('/api/v1/palettes')
+        .end( (error, response) => {
+          response.should.have.status(200);
+          response.body.should.be.a('array');
+          response.body.length.should.equal(3);
+          response.res.text.should.include('Lollipops');
+          done();
+        });
       });
     });
 
@@ -204,21 +222,29 @@ describe('API Routes', () => {
       .delete('/api/v1/palettes/1')
       .end( (error, response) => {
         response.should.have.status(204);
-        done();
+
+        chai.request(server)
+        .get('/api/v1/palettes')
+        .end( (error, response) => {
+          response.should.have.status(200);
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.res.text.should.not.include('pastels');
+          done();
+        });
       });
     });
 
-    it('should return return a status 422 if palette cannot be found', (done) => {
+    it('should return return a status 404 if palette cannot be found', (done) => {
       chai.request(server)
       .delete('/api/v1/palettes/100')
       .end( (error, response) => {
-        response.should.have.status(422);
+        response.should.have.status(404);
         response.body.error.should.equal('A palette matching the id submitted could not be found');
         done();
       });
     });
   });
-
 
 
 });
