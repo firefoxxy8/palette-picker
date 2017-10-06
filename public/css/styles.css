@@ -49,13 +49,13 @@ header {
 }
 
 .page-title {
-  color: #666;
+  color: #000;
   font-size: 60px;
   text-align: center;
 }
 
 .page-instruction {
-  color: #666;
+  color: #000;
   font-size: 20px;
   text-align: center;
 }
