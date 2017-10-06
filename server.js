@@ -14,10 +14,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'Palette Picker';
 
-// ENDPOINTS
-// retrieve all projects
+app.listen(app.get('port'), () => {
+  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+});
 
-// do i need to add 404 status logic here?
+// ENDPOINTS
+
+// retrieve all projects
 app.get('/api/v1/projects', (request, response) => {
   database('projects').select()
     .then( projects => response.status(200).json(projects) )
@@ -25,7 +28,6 @@ app.get('/api/v1/projects', (request, response) => {
 });
 
 // retrieve all palettes
-// do i need to add 404 status logic here?
 app.get('/api/v1/palettes', (request, response) => {
   database('palettes').select()
     .then( palettes => response.status(200).json(palettes))
@@ -84,8 +86,5 @@ app.delete('/api/v1/palettes/:id', (request, response) => {
     .catch( error => response.status(500).json({ error }) );
 });
 
-app.listen(app.get('port'), () => {
-  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
-});
 
 module.exports = app;
