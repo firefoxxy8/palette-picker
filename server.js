@@ -44,7 +44,7 @@ app.get('/api/v1/palettes', (request, response) => { // For 'GET' requests to '/
 
 // create and save a new project folder
 app.post('/api/v1/projects', (request, response) => { // For 'POST' requests to '/api/v1/projects'
-  const { project_name } = request.body; // From the request object's body property, sent in by client, grab the project name value and set to a variable called project_name.
+  const { project_name } = request.body; // From the request object's body property, sent in by client, grab the project name value and destructure it so we have an object with property of project_name and its corresponding value.
   if (!project_name) { // If project_name does not exist
     return response.status(422).json({ error: 'Missing required information of property: project_name to complete request' }) // Send client response status of 422 and an error message denoting that client must submit a property (with value) of 'project_name' in order to carry out request.
   }
@@ -54,9 +54,9 @@ app.post('/api/v1/projects', (request, response) => { // For 'POST' requests to 
     .catch( error => response.status(500).json({ error })) // If there is a server-side error, respond to client with a status 500, and in json, the error that occurred.
 });
 
-// save a palette to database
-app.post('/api/v1/palettes', (request, response) => {
-  const paletteObject = request.body;
+// save a new palette to database
+app.post('/api/v1/palettes', (request, response) => { // For 'POST' requests to '/api/v1/palettes'
+  const paletteObject = request.body; // From the request object's body property, sent in by client, grab the entire palette object and set to variable called 'paletteObject'.
   for (let requiredParameter of [
     'palette_name',
     'hex_one',
@@ -65,36 +65,33 @@ app.post('/api/v1/palettes', (request, response) => {
     'hex_four',
     'hex_five',
     'project_id'
-  ]) {
-      if (!paletteObject[requiredParameter]) {
+  ]) { // Loop through the array of required parameters, or specific properties required to add a palette to the database.
+      if (!paletteObject[requiredParameter]) { // If at any point, the required parameter does not exist, respond with an error
         return response
           .status(422)
           .send({ error: `Expected format: { palette_name: <String>, hex_one: <String>, hex_two: <String>, hex_three: <String>, hex_four: <String>, hex_five: <String>, project_id: <Integer> }. You're missing a ${requiredParameter} property.` });
-      }
+      } // Send client response status of 422 and an error message denoting that client must submit within the request body, information in the correct format, and include which property is missing.
     }
-
-  database('palettes').insert(paletteObject, '*')
-    .then( palette => {
-      response.status(201).json(palette)
-    })
-    .catch( error => {
-      response.status(500).json({ error });
-    });
+  // In the case that all information was submitted correctly
+  database('palettes').insert(paletteObject, '*') // Insert paletteObject into the palettes table of the database, and return all information from the palette object in the form of a promise.
+    .then( palette => response.status(201).json(palette)) // Consume promise, and edit response object to send client status of 201 (successfully created) and in json format, the palette object that was just added to the database.
+    .catch( error => response.status(500).json({ error })) // If there is a server-side error, respond to client with a status 500, and in json, the error that occurred.
 });
 
 // delete a palette
-app.delete('/api/v1/palettes/:id', (request, response) => {
-  const { id } = request.params;
+app.delete('/api/v1/palettes/:id', (request, response) => { // For 'DELETE' requests to '/api/v1/palettes/:id' - the ':id' is dynamic and represents the palette id submitted.
+  const { id } = request.params; // From the request object's params property, because the palette id is placed in the endpoint, grab the palette id and corresponding value (destructuring).
 
-  database('palettes').where({ id }).del()
-    .then( deleted => !deleted ?
+  database('palettes').where({ id }).del() // Match the id number that was submitted with one in the palettes table of database, and delete that entire row in palettes table. Returns a promise with either 0 or 1 value, depending on whether anything was successfully deleted.
+    .then( deleted => !deleted ? // Consume promise. Check whether value returned was 0 or 1.
+      // If value returned was 0, then respond with a status of 404 and a message that the id submitted did not match any of the palettes in the database, and thus, nothing was deleted.
       response.status(404).json({ error: 'A palette matching the id submitted could not be found' })
       :
+      // If value returned was 1, then respond with a status of 204, meaning deletion was successful, but am not returning any content to client.
       response.sendStatus(204) )
-    .catch( error => response.status(500).json({ error }) );
+    .catch( error => response.status(500).json({ error }) )  // If there is a server-side error, respond to client with a status 500, and in json, the error that occurred.
 });
 
 
-
-
+// Export app to be used in testing suite
 module.exports = app;
