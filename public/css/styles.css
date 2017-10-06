@@ -113,7 +113,7 @@ header {
 .input {
   height: 40px;
   padding: 5px;
-  border: 1px solid rgb(166, 166, 166);
+  border: 1px solid #a6a6a6;
   border-radius: 5px;
   font-size: 20px;
 }
@@ -123,7 +123,7 @@ button {
   padding: 0 5px;
   font-size: 18px;
   background: #f8f8f8;
-  border: 1px solid rgb(166, 166, 166);
+  border: 1px solid #a6a6a6;
   border-radius: 5px;
   box-shadow: 1px 1px 1px #d8d8d8;
   cursor: pointer;
@@ -180,6 +180,7 @@ button {
 }
 
 .fa-trash {
+  color: #666;
   font-size: 25px;
 }
 
@@ -190,5 +191,5 @@ button {
 .small-hex {
   height: 60px;
   width: 60px;
-  border: 1px solid black;
+  border: 1px solid #666;
 }
