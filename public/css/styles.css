@@ -13,6 +13,7 @@ body {
   height: 100%;
   background: #f8f8f8;
   color: #666;
+  font-family: 'Raleway', sans-serif;
 }
 
 aside {
@@ -50,6 +51,7 @@ header {
 
 .page-title {
   color: #000;
+  font-family: 'Lobster', cursive;
   font-size: 60px;
   text-align: center;
 }
@@ -130,6 +132,8 @@ button {
 }
 
 .recent-projects-container > h2 {
+  margin: 15px 0;
+  padding: 10px;
   background: #666;
   color: #fff;
   font-size: 30px;
