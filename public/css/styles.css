@@ -16,7 +16,25 @@ body {
   font-family: 'Raleway', sans-serif;
 }
 
-aside {
+.error-container {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 10%;
+  width: 80%;
+  height: 50px;
+  background: tomato;
+  box-shadow: 2px 2px 2px #666;
+  z-index: 100;
+}
+
+.error-heading {
+  color: #666;
+  font-size: 30px;
+  text-align: center;
+}
+
+.leftside-container {
   width: 40%;
   height: 100vh;
   overflow: scroll;

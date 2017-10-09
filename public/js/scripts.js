@@ -38,6 +38,17 @@ const prependProject = (projectObject) => {
     </article>`);
 }
 
+const appendErrorMessage = () => {
+  $('.error-container').css('display', 'block');
+  $('.error-container').append(
+    `<h4 class='error-heading'>Sorry, that project name already exists.</h4>`
+  );
+
+  setTimeout( () => {
+    $('.error-container').css('display', 'none');
+  }, 2000);
+}
+
 const storeProject = (project_name) => {
   fetch('/api/v1/projects', {
     method: 'POST',
@@ -49,6 +60,7 @@ const storeProject = (project_name) => {
   .then( response => {
     if (response.status !== 201) {
       console.log(response);
+      appendErrorMessage();
     }
     return response;
   })
@@ -193,8 +205,6 @@ const toggleSaveDisable = (e, button) => {
 }
 
 const createNew = (e) => {
-  console.log('focused', $('.project-name').is(':focus'));
-
   e.keyCode === 13 && $('.project-name').is(':focus') ? createNewProject() : null
 
   e.keyCode === 13 && $('.palette-name').is(':focus') ? createNewPalette() :
