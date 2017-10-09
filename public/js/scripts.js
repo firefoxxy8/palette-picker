@@ -39,15 +39,15 @@ const prependProject = (projectObject) => {
 }
 
 const appendErrorMessage = (message) => {
-  $('.error-container').css('display', 'block');
+  $('.error-container').addClass('error-transition');
   $('.error-container').append(
     `<h4 class='error-heading'>${message}</h4>`
   );
 
   setTimeout( () => {
     $('.error-heading').remove();
-    $('.error-container').css('display', 'none');
-  }, 2000);
+    $('.error-container').removeClass('error-transition');
+  }, 2500);
 }
 
 const storeProject = (project_name) => {
