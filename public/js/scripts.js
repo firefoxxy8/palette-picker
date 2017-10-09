@@ -13,7 +13,7 @@ const generateColorPalette = () => {
 }
 
 const generateNewColorPalette = (e) => {
-  e.keyCode === 32 && !$('input').is(':focus') ? generateColorPalette() : false
+  e.keyCode === 32 && !$('input').is(':focus') ? generateColorPalette() : null
 }
 
 const disableBtn = (button) => {
@@ -192,6 +192,15 @@ const toggleSaveDisable = (e, button) => {
     $(button).prop('disabled', false)
 }
 
+const createNew = (e) => {
+  console.log('focused', $('.project-name').is(':focus'));
+
+  e.keyCode === 13 && $('.project-name').is(':focus') ? createNewProject() : null
+
+  e.keyCode === 13 && $('.palette-name').is(':focus') ? createNewPalette() :
+  null
+}
+
 $('.recent-projects').on('click', '.palette-card', displayLargePalette);
 $('.recent-projects').on('click', '.delete-btn', deletePalette);
 $('.save-palette-btn').on('click', createNewPalette);
@@ -199,6 +208,6 @@ $('.save-project-btn').on('click', createNewProject);
 $('.fa').on('click', toggleLockedClass);
 $(window).on('keyup', generateNewColorPalette);
 $(window).on('load', loadPageInfo);
-
+$(window).on('keydown', createNew);
 $('.project-name').on('input', (e) => toggleSaveDisable(e, '.save-project-btn') );
 $('.palette-name').on('input', (e) => toggleSaveDisable(e, '.save-palette-btn') );
