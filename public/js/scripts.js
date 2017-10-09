@@ -45,6 +45,7 @@ const appendErrorMessage = (message) => {
   );
 
   setTimeout( () => {
+    $('.error-heading').remove();
     $('.error-container').css('display', 'none');
   }, 2000);
 }

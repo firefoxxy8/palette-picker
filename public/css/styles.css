@@ -17,15 +17,25 @@ body {
 }
 
 .error-container {
-  display: none;
   position: absolute;
-  top: 0;
+  top: -100px;
   left: 10%;
   width: 80%;
   height: 50px;
   background: tomato;
   box-shadow: 2px 2px 2px #666;
   z-index: 100;
+  animation: slide 0.5s forwards;
+  animation-delay: 2s;
+}
+
+.error-transition .error-container {
+    transition: 1s;
+    top: 0;
+}
+
+@keyframes slide {
+    100% { top: 0; }
 }
 
 .error-heading {
