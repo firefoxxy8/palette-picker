@@ -25,8 +25,9 @@ const toggleLockedClass = (e) => {
 
 const prependProject = (projectObject) => {
   const { project_name, id } = projectObject;
+  const upperCase = project_name.toUpperCase()
   $('#project-dropdown')
-    .prepend(`<option value='${id}'>${project_name}</option>`);
+    .prepend(`<option value='${id}'>${upperCase}</option>`);
   $('.recent-projects').prepend(`
     <article class='project-card' id='project-${id}'>
       <h3>${project_name}</h3>
