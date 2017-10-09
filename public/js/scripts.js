@@ -38,10 +38,10 @@ const prependProject = (projectObject) => {
     </article>`);
 }
 
-const appendErrorMessage = () => {
+const appendErrorMessage = (message) => {
   $('.error-container').css('display', 'block');
   $('.error-container').append(
-    `<h4 class='error-heading'>Sorry, that project name already exists.</h4>`
+    `<h4 class='error-heading'>${message}</h4>`
   );
 
   setTimeout( () => {
@@ -59,8 +59,7 @@ const storeProject = (project_name) => {
   })
   .then( response => {
     if (response.status !== 201) {
-      console.log(response);
-      appendErrorMessage();
+      appendErrorMessage('Sorry, that project name already exists.');
     }
     return response;
   })
@@ -119,7 +118,7 @@ const storePalette = (paletteObject) => {
   })
   .then( response => {
     if (response.status !== 201) {
-      console.log(response);
+      appendErrorMessage('Sorry, there was an error and the color palette could not be added.');
     }
     return response;
   })
