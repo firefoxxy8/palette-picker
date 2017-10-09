@@ -16,6 +16,10 @@ const generateNewColorPalette = (e) => {
   e.keyCode === 32 && !$('input').is(':focus') ? generateColorPalette() : false
 }
 
+const disableBtn = (button) => {
+  $(button).prop('disabled', true)
+}
+
 const toggleLockedClass = (e) => {
   ($(e.target).hasClass('fa-unlock-alt')) ?
     $(e.target).removeClass('fa-unlock-alt').addClass('fa-lock')
@@ -57,6 +61,7 @@ const createNewProject = () => {
   const projectName = $('.project-name').val();
   storeProject(projectName);
   $('.project-name').val('');
+  disableBtn('.save-project-btn');
 }
 
 const appendSwatches = (colourSwatches, id) => {
@@ -123,6 +128,7 @@ const createNewPalette = () => {
   });
   storePalette(paletteObject);
   $('.palette-name').val('');
+  disableBtn('.save-palette-btn');
 }
 
 const fetchAll = (path, appendMethod) => {
@@ -178,6 +184,14 @@ const displayLargePalette = (e) => {
   }
 }
 
+const toggleSaveDisable = (e, button) => {
+  const input = $(e.target).val();
+  input === '' ?
+    $(button).prop('disabled', true)
+    :
+    $(button).prop('disabled', false)
+}
+
 $('.recent-projects').on('click', '.palette-card', displayLargePalette);
 $('.recent-projects').on('click', '.delete-btn', deletePalette);
 $('.save-palette-btn').on('click', createNewPalette);
@@ -185,3 +199,6 @@ $('.save-project-btn').on('click', createNewProject);
 $('.fa').on('click', toggleLockedClass);
 $(window).on('keyup', generateNewColorPalette);
 $(window).on('load', loadPageInfo);
+
+$('.project-name').on('input', (e) => toggleSaveDisable(e, '.save-project-btn') );
+$('.palette-name').on('input', (e) => toggleSaveDisable(e, '.save-palette-btn') );
