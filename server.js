@@ -9,7 +9,16 @@ const database = require("knex")(configuration);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+// app.use();
+
+app.use(express.static(path.join(__dirname, "public")), (request, response, next) => {
+  if(!request.secure && process.env.NODE_ENV === 'production') {
+    const secureUrl = 'https://' + request.headers['host'] + request.url;
+    response.writeHead(301, { 'Location':  secureUrl });
+    response.end();
+  }
+  next();
+});
 
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'Palette Picker';
