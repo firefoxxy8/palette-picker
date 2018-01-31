@@ -16,3 +16,13 @@ window.onerror = (msg, url, lineNo, columnNo, error) => {
     }
     return false;
 };
+
+const perfData = window.performance.timing; 
+const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+console.log({ pageLoadTime });
+
+const connectTime = perfData.responseEnd - perfData.requestStart;
+console.log({ connectTime });
+
+const renderTime = perfData.domComplete - perfData.domLoading;
+console.log({ renderTime });
