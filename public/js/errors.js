@@ -1,3 +1,18 @@
-window.onerror=function(msg,url,lineNo,columnNo,error){var string=msg.toLowerCase();var substring="script error";if(string.indexOf(substring)>-1){}
-else{var message=['m='+ msg,'u='+ url,'l='+ lineNo,'c='+ columnNo,'e='+ JSON.stringify(error)].join('&');var xhttp=new XMLHttpRequest();xhttp.open("GET","//influxmon.crosno.net/error.txt?"+message,true);xhttp.send();}
-return false;};
+window.onerror = (msg, url, lineNo, columnNo, error) => {
+    const string = msg.toLowerCase();
+    const substring = "script error";
+    if (string.indexOf(substring) > -1){
+        console.log('Script Error: See Browser Console for Detail');
+    } else {
+        var message = [
+            'Message: ' + msg,
+            'URL: ' + url,
+            'Line: ' + lineNo,
+            'Column: ' + columnNo,
+            'Error object: ' + JSON.stringify(error)
+        ].join(' - ');
+
+        console.log({ message });
+    }
+    return false;
+};
