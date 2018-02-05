@@ -11,14 +11,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-const redirectToHTTPS = (request, response, next) => {
-  if (request.headers['x-forwarded-proto'] != 'https') {
-    return response.redirect('https://' + request.get('host') + request.url);
-  }
-  next();
-};
-
-app.use(redirectToHTTPS);
+// const redirectToHTTPS = (request, response, next) => {
+//   if (request.headers['x-forwarded-proto'] != 'https') {
+//     return response.redirect('https://' + request.get('host') + request.url);
+//   }
+//   next();
+// };
+//
+// app.use(redirectToHTTPS);
 
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'Palette Picker';
@@ -90,5 +90,14 @@ app.delete('/api/v1/palettes/:id', (request, response) => {
     .catch( error => response.status(500).json({ error }) );
 });
 
+app.post('/api/v1/perf', (request, response) => {
+  const { perfData } = request.body;
+  const connectTime = perfData.responseEnd - perfData.requestStart;
+  const renderTime = perfData.domComplete - perfData.domLoading;
+  console.log({ connectTime });
+  console.log({ renderTime });
+
+  response.status(200).json({});
+});
 
 module.exports = app;
