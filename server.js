@@ -121,10 +121,11 @@ app.post('/api/v1/perf', (request, response) => {
       fields: { connect: connectTime, render: renderTime }
     }
   ])
-  .then(response => response.sendStatus(200))
   .catch(error => {
     console.error(`Error saving to InfluxDB! ${error.stack}`);
   });
+
+  response.sendStatus(200);
 });
 
 module.exports = app;
