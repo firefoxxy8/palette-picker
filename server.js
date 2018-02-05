@@ -1,11 +1,30 @@
+const Influx = require('influx');
 const express = require("express");
 const path = require("path");
+const os = require('os');
 const bodyParser = require("body-parser");
 const app = express();
 
 const environment = process.env.NODE_ENV || "development";
 const configuration = require("./knexfile")[environment];
 const database = require("knex")(configuration);
+
+const influx = new Influx.InfluxDB({
+  host: 'localhost',
+  database: 'telegraf',
+  schema: [
+    {
+      measurement: 'browser_perf',
+      fields: {
+        connect: Influx.FieldType.INTEGER,
+        render: Influx.FieldType.INTEGER,
+      },
+      tags: [
+        'host'
+      ]
+    }
+  ]
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -94,10 +113,18 @@ app.post('/api/v1/perf', (request, response) => {
   const { perfData } = request.body;
   const connectTime = perfData.responseEnd - perfData.requestStart;
   const renderTime = perfData.domComplete - perfData.domLoading;
-  console.log({ connectTime });
-  console.log({ renderTime });
 
-  response.status(200).json({});
+  influx.writePoints([
+    {
+      measurement: 'browser_perf',
+      tags: { host: os.hostname() },
+      fields: { connect: connectTime, render: renderTime }
+    }
+  ])
+  .then(response => response.sendStatus(200))
+  .catch(error => {
+    console.error(`Error saving to InfluxDB! ${error.stack}`);
+  });
 });
 
 module.exports = app;
