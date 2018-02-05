@@ -1,5 +1,7 @@
+const Influx = require('influx');
 const express = require("express");
 const path = require("path");
+const os = require('os');
 const bodyParser = require("body-parser");
 const app = express();
 
@@ -7,18 +9,35 @@ const environment = process.env.NODE_ENV || "development";
 const configuration = require("./knexfile")[environment];
 const database = require("knex")(configuration);
 
+const influx = new Influx.InfluxDB({
+  host: 'localhost',
+  database: 'telegraf',
+  schema: [
+    {
+      measurement: 'browser_perf',
+      fields: {
+        connect: Influx.FieldType.INTEGER,
+        render: Influx.FieldType.INTEGER,
+      },
+      tags: [
+        'host'
+      ]
+    }
+  ]
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-const redirectToHTTPS = (request, response, next) => {
-  if (request.headers['x-forwarded-proto'] != 'https') {
-    return response.redirect('https://' + request.get('host') + request.url);
-  }
-  next();
-};
-
-app.use(redirectToHTTPS);
+// const redirectToHTTPS = (request, response, next) => {
+//   if (request.headers['x-forwarded-proto'] != 'https') {
+//     return response.redirect('https://' + request.get('host') + request.url);
+//   }
+//   next();
+// };
+//
+// app.use(redirectToHTTPS);
 
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'Palette Picker';
@@ -90,5 +109,22 @@ app.delete('/api/v1/palettes/:id', (request, response) => {
     .catch( error => response.status(500).json({ error }) );
 });
 
+app.post('/api/v1/perf', (request, response) => {
+  const { perfData } = request.body;
+  const connectTime = perfData.responseEnd - perfData.requestStart;
+  const renderTime = perfData.domComplete - perfData.domLoading;
+
+  influx.writePoints([
+    {
+      measurement: 'browser_perf',
+      tags: { host: os.hostname() },
+      fields: { connect: connectTime, render: renderTime }
+    }
+  ])
+  .then(response => response.sendStatus(200))
+  .catch(error => {
+    console.error(`Error saving to InfluxDB! ${error.stack}`);
+  });
+});
 
 module.exports = app;

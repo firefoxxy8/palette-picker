@@ -17,12 +17,21 @@ window.onerror = (msg, url, lineNo, columnNo, error) => {
     return false;
 };
 
-const perfData = window.performance.timing; 
-const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-console.log({ pageLoadTime });
+window.addEventListener('load', (e) => {
+  const perfData = window.performance.timing;
 
-const connectTime = perfData.responseEnd - perfData.requestStart;
-console.log({ connectTime });
-
-const renderTime = perfData.domComplete - perfData.domLoading;
-console.log({ renderTime });
+  fetch('/api/v1/perf', {
+    method: 'POST',
+    body: JSON.stringify({ perfData }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    if (response.status !== 201) {
+      console.log(response);
+    }
+    return response;
+  })
+  .catch(error => console.log(error));
+});
