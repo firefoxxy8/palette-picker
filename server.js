@@ -18,7 +18,7 @@ const redirectToHTTPS = (request, response, next) => {
   next();
 };
 
-app.use(redirectToHTTPS);
+// app.use(redirectToHTTPS);
 
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'Palette Picker';
